@@ -11,7 +11,7 @@ public class RSACipher{
     public static BigInteger m_q;
     public static BigInteger m_e;
     public static BigInteger m_d;
-    public static BigInteger temp;
+    public static BigInteger phi_n;
     public static BigInteger m_n;
     public static int text_length;
     public static String file_en="";
@@ -31,7 +31,7 @@ public class RSACipher{
          //4.计算q-1
          BigInteger q_1=m_q.subtract(new BigInteger("1"));
          //5.计算（p-1）×（q-1）
-         temp =p_1.multiply(q_1);
+         phi_n=p_1.multiply(q_1);
          //6.随机生成解密密钥d
          get_m_d();
          //7.根据d计算加密密钥e(e为d的模（p-1）*(q-1)逆)
@@ -51,7 +51,7 @@ public class RSACipher{
         m_p=gp.m_p[i];
         m_q=gp.m_q[i];
         m_n=gp.m_n[i];
-        temp=gp.tmp[i];
+        phi_n=gp.phi_n[i];
         m_d=gp.m_d[i];
         m_e=gp.m_e[i];
         /////////////////////////////////////////////////////////////////////////////////
@@ -130,13 +130,13 @@ public class RSACipher{
     
     public static void get_m_d()
     {
-        //必须小于temp
+        //必须小于phi_n
         m_d=new BigInteger(pq_length-5,5,new Random());
     }
     
     public static void get_m_e()
     {
-        m_e=m_d.modInverse(temp);
+        m_e=m_d.modInverse(phi_n);
     }
     
     public static void get_pq_prime()
